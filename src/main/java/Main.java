@@ -1,36 +1,54 @@
 import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.bson.Document;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+//import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+
 public class Main {
-    public static MongoClient mongoClient;
-    public static DB database;
-    public static DBCollection collection;
 
     public static void main(String[] args) {
-
-        final String url =
-                "https://scryfall.com/card/cmr/365/aesi-tyrant-of-gyre-strait";
+        // scrape testing
+        /*final String url =
+                "https://www.mtggoldfish.com/index/PLIST#paper";
         try {
-            final Document document = Jsoup.connect(url).get();
-            Elements ele = document.select("div.card-text");
-            System.out.println(ele.select("h1.card-text-title").text());
-            System.out.println(ele.select("div.card-text-box").text());
-            System.out.println(ele.select("div.card-text-stats").text());
+            final org.jsoup.nodes.Document document = Jsoup.connect(url).get();
 
-            /*for (Element ele : document.select ("div.card-text")) {
-                final String information = ele.select("div.card-text-box").text();
-                System.out.println(information);
-            }*/
-            // System.out.println(document.outerHtml());
+            for (Element row : document.select ("table tr")) {
+                if(row.select("td:nth-of-type(1)").text() == "") {
+                    continue;
+                }
+                else {
+                    Elements aElement = row.select("td a");
+                    String cardLink = aElement.attr("href");
+                    if (cardLink.equals("")) {
+                        continue;
+                    }
+                    System.out.print("mtggoldfish.com" + cardLink + "  ");
+                    String cardName = row.select("td:nth-of-type(1)").text();
+                    System.out.println(cardName);
+                }
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
-        }
-        /*mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:28717"));
-        database = (DB) mongoClient.getDatabase("MagicLibrary");
-        collection = database.getCollection("test");*/
-        // DBObject obj = new BasicDBObject("employee", "bob").append("items", new int[]).append("table", "table5");
+        }*/
+
+        // MongoDB access with environment variables
+        Dotenv dotenv = Dotenv.configure().load();
+        String uri = dotenv.get("MONGODB_PREFIX") + dotenv.get("MONGODB_USER") + ":" + dotenv.get("MONGODB_PASSWORD") + dotenv.get("MONGODB_CLUSTER");
+        MongoClientURI clientURI = new MongoClientURI(uri);
+        MongoClient mongoClient = new MongoClient(clientURI);
+
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("MagicLibrary");
+        MongoCollection urlCollection = mongoDatabase.getCollection("CardURL");
+
+        Document document = new Document("Name", "Andrew");
+        document.append("Sex", "Male");
+        urlCollection.insertOne(document);
     }
 }
