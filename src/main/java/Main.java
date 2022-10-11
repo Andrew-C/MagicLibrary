@@ -4,35 +4,36 @@ import com.mongodb.client.MongoDatabase;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
 import org.jsoup.Jsoup;
-//import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
 
 
 public class Main {
 
     public static void main(String[] args) {
-        // MongoDB access with environment variables
+        // Connecting to MongoDB
         Dotenv dotenv = Dotenv.configure().load();
         String uri = dotenv.get("MONGODB_PREFIX") + dotenv.get("MONGODB_USER") + ":" + dotenv.get("MONGODB_PASSWORD") + dotenv.get("MONGODB_CLUSTER");
         MongoClientURI clientURI = new MongoClientURI(uri);
-        MongoClient mongoClient = new MongoClient(clientURI);
 
-        MongoDatabase mongoDatabase = mongoClient.getDatabase("MagicLibrary");
-        MongoCollection urlCollection = mongoDatabase.getCollection("CardURL");
-
-        /*Document document = new Document("Name", "Andrew");
-        document.append("Sex", "Male");
-        urlCollection.insertOne(document);*/
+        MongoDatabase mongoDatabase;
+        try (MongoClient mongoClient = new MongoClient(clientURI)) {
+            mongoDatabase = mongoClient.getDatabase("MagicLibrary");
+        }
+        MongoCollection<Document> cardCollection = mongoDatabase.getCollection("CardData");
 
         // scrape testing
-        final String url =
+        final String listURL =
                 "https://www.mtggoldfish.com/index/PLIST#paper";
         try {
-            final org.jsoup.nodes.Document document = Jsoup.connect(url).get();
+            // Connect to the URL
+            final org.jsoup.nodes.Document listDoc = Jsoup.connect(listURL).get();
 
-            for (Element row : document.select ("table tr")) {
-                if(row.select("td:nth-of-type(1)").text() == "") {
+            // Looks for every table row in document
+            for (Element row : listDoc.select ("table tr")) {
+                if (row.select("td:nth-of-type(1)").text().equals("")) {
                     continue;
                 }
                 else {
@@ -44,10 +45,7 @@ public class Main {
                     }
 
                     String cardURL = ("mtggoldfish.com" + cardLink);
-                    String cardName = row.select("td:nth-of-type(1)").text();
-
-                    Document doc = new Document("Card Name", cardName).append("URL", cardURL);
-                    urlCollection.insertOne(doc);
+                    // TODO: finish parser and parse here
                 }
             }
         }
