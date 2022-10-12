@@ -2,8 +2,10 @@ public class Card {
     private String cardName;
     private String manaCost;
     private int convertedCost = 0;
+    private String rarity;
     private String powerVal;
     private String type;
+    private String description;
 
     private Colour colour;
 
@@ -66,5 +68,21 @@ public class Card {
 
     public void setColour(Colour colour) {
         this.colour = colour;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(String rarity) {
+        this.rarity = rarity;
     }
 }

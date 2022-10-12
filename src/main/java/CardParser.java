@@ -22,12 +22,25 @@ public class CardParser {
 
         Elements cardType = cardDoc.select("p.gatherer-type");
         String type = cardType.text();
-        String powerVal = "";
+        String powerVal = " ";
         if (type.contains("Creature") || type.contains("Planeswalker")) {
             Elements cardPower = cardDoc.select("div.gatherer-power");
             powerVal = cardPower.text();
         }
-        // TODO: parse the rest of the parameters
-        return new Card();
+
+        Elements current = cardData.select("p.gatherer-oracle");
+        String description = current.text();
+        current = cardData.select(".collapse .gatherer-rarity");
+        String rarity = current.text();
+        // TODO: parse colour, cost, and type parameters
+
+
+        Card card = new Card();
+        card.setCardName(name);
+        card.setType(type);
+        card.setDescription(description);
+        card.setRarity(rarity);
+        card.setPowerVal(powerVal);
+        return card;
     }
 }
