@@ -13,12 +13,13 @@ public class Card {
 
     }
 
-    public Card(String cardName, String manaCost, int convertedCost, String powerVal, String type, Colour colour) {
+    public Card(String cardName, String manaCost, int convertedCost, String powerVal, String type, String rarity, Colour colour) {
         this.cardName = cardName;
         this.manaCost = manaCost;
         this.convertedCost = convertedCost;
         this.powerVal = powerVal;
         this.type = type;
+        this.rarity = rarity;
         this.colour = colour;
     }
 

@@ -13,13 +13,54 @@ public class CardParserTest {
         assertEquals("Emrakul, the Aeons Torn", card.getCardName());
     }
 
+    @Test
+    void returnsManaCostGen() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Emrakul+the+Aeons+Torn#paper");
+        Card card = parser.parse();
+        assertEquals("15", card.getManaCost());
+    }
+
+    @Test
+    void returnsManaCostColour() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Progenitus#paper");
+        Card card = parser.parse();
+        assertEquals("white white blue blue black black red red green green", card.getManaCost());
+    }
+
+    @Test
+    void returnsManaCostGenAndColour() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Temporal+Manipulation#paper");
+        Card card = parser.parse();
+        assertEquals("3 blue blue", card.getManaCost());
+    }
+
+    @Test
+    void returnsConvertedCostGen() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Emrakul+the+Aeons+Torn#paper");
+        Card card = parser.parse();
+        assertEquals(15, card.getConvertedCost());
+    }
+
+    @Test
+    void returnsConvertedCostColour() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Progenitus#paper");
+        Card card = parser.parse();
+        assertEquals(10, card.getConvertedCost());
+    }
+
+    @Test
+    void returnsConvertedCostGenAndColour() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Temporal+Manipulation#paper");
+        Card card = parser.parse();
+        assertEquals(5, card.getConvertedCost());
+    }
+
     // TODO: handle hyphen
     @Test
     void returnsType() throws IOException {
         CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Emrakul+the+Aeons+Torn#paper");
         Card card = parser.parse();
-        assertEquals("\n" +
-                "Legendary Creature — Eldrazi", card.getType());
+        assertEquals("Legendary Creature \u2014 Eldrazi", card.getType());
     }
 
     @Test
