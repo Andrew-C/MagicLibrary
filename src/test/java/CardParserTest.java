@@ -35,6 +35,13 @@ public class CardParserTest {
     }
 
     @Test
+    void returnsManaCostNone() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Vesuva#paper");
+        Card card = parser.parse();
+        assertEquals("", card.getManaCost());
+    }
+
+    @Test
     void returnsConvertedCostGen() throws IOException {
         CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Emrakul+the+Aeons+Torn#paper");
         Card card = parser.parse();
@@ -53,6 +60,13 @@ public class CardParserTest {
         CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Temporal+Manipulation#paper");
         Card card = parser.parse();
         assertEquals(5, card.getConvertedCost());
+    }
+
+    @Test
+    void returnsConvertedCostNone() throws IOException {
+        CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Vesuva#paper");
+        Card card = parser.parse();
+        assertEquals(0, card.getConvertedCost());
     }
 
     // TODO: handle hyphen
@@ -92,6 +106,6 @@ public class CardParserTest {
     void returnsEnchantmentPowerVal() throws IOException {
         CardParser parser = new CardParser("https://www.mtggoldfish.com/price/The+List/Enlightened+Tutor#paper");
         Card card = parser.parse();
-        assertEquals(" ", card.getPowerVal());
+        assertEquals("", card.getPowerVal());
     }
 }

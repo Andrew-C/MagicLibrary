@@ -13,14 +13,14 @@ public class Card {
 
     }
 
-    public Card(String cardName, String manaCost, int convertedCost, String powerVal, String type, String rarity, Colour colour) {
+    public Card(String cardName, String manaCost, int convertedCost, String powerVal, String type, String rarity, String description) {
         this.cardName = cardName;
         this.manaCost = manaCost;
         this.convertedCost = convertedCost;
         this.powerVal = powerVal;
         this.type = type;
         this.rarity = rarity;
-        this.colour = colour;
+        this.description = description;
     }
 
     public String getCardName() {
@@ -79,11 +79,7 @@ public class Card {
         this.description = description;
     }
 
-    public String getRarity() {
-        return rarity;
-    }
+    public String getRarity() {return rarity; }
 
-    public void setRarity(String rarity) {
-        this.rarity = rarity;
-    }
+    public void setRarity(String rarity) {this.rarity = rarity; }
 }
